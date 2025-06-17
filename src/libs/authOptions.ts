@@ -1,75 +1,75 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth"
+import { NextAuthOptions } from "next-auth";
 import { dbConnection } from "./dbConnect";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
-    providers: [
+    providers : [
         CredentialsProvider({
-            name: "Credentials",
+             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "email" },
+                email: { label: "Email", type: "text", },
                 password: { label: "Password", type: "password" }
             },
-            // authorize method
+
+            // authorize function
             async authorize(credentials){
                 if (!credentials?.email || !credentials?.password) {
                     throw new Error("Missing email or password")
                 }
 
-                 try {
-                // db Connection
+                try {
+                    // db connection
                     await dbConnection();
 
-                    const user  = await User.findOne({email: credentials.email});
+                    const user = await User.findOne({email: credentials.email});
                     if (!user) {
-                        throw new Error("No user found with this email")
+                        throw new Error("User not found")
                     }
 
-                    // check passowrd
-                    const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
-                    if (!isPasswordCorrect) {
+                    // if user found, check password
+                    const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+                    if (!isPasswordValid) {
                         throw new Error("Invalid password")
                     }
 
-                    // return
+                    // return the user with id and email
                     return {
                         id: user._id.toString(),
-                        email: user.email
+                        email: user.email,
                     }
+
                 } catch (error) {
-                    console.log("Auth error: ", error)
+                    console.log("Login failed");
                     throw error;
                 }
             }
+
         })
     ],
-
     // callbacks
     callbacks: {
-        async session({ session, token }) {
+        async session({ session, user, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
             }
-            return session;
+            return session
         },
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
+                token.id = user.id
             }
-            return token;
+            return token
         }
     },
-    // pages
     pages: {
         signIn: "/login",
         error: "/login"
     },
-    // session
     session: {
         strategy: "jwt",
-        maxAge: 30 * 24 * 60 * 60,
+        maxAge: 30 * 24 * 60 * 60 // 30 days
     },
     secret: process.env.NEXTAUTH_SECRET
 }

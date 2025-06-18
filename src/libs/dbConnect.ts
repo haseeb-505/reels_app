@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
-    throw new Error("Please define monogdb_uri in env variables");
+    throw new Error("Please define MONGODB_URI in env variables");
 }
 
 let cached = global.mongoose;

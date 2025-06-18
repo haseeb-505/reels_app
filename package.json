@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@imagekit/next": "^2.1.2",
+    "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
+    "lucide-react": "^0.516.0",
     "mongoose": "^8.16.0",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sonner": "^2.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

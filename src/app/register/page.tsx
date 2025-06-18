@@ -25,6 +25,8 @@ const page = () => {
     }
 
     try {
+        // react query
+        // loading, error, debouncing state
       const response = await axios.post("/api/auth/register", {
         email,
         password,

@@ -12,7 +12,7 @@ export interface IVideo {
     _id: mongoose.Types.ObjectId;
     title: string;
     description?: string;
-    videoUrl: string;
+    fileUrl: string;
     thumbnailUrl?: string;
     controls?: boolean;
     transformation?: {
@@ -26,7 +26,7 @@ export interface IVideo {
 const videoSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String, },
-    videoUrl: { type: String, required: true },
+    fileUrl: { type: String, required: true },
     thumbnailUrl: { type: String },
     controls: { type: Boolean, default: true },
     transfromation: {

@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         const body: IVideo = await request.json();
         if (
             !body.title
-            || !body.videoUrl
+            || !body.fileUrl
         ) {
             return NextResponse.json(
                 {error: "Missing required fields"}, 
@@ -62,6 +62,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(newVideo);
 
     } catch (error) {
+        console.log("Error here is: ", error)
         return NextResponse.json({
             error: "Failed to create the video"
         }, {status: 500})
